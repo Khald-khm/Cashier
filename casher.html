@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+    <title>Casher</title>
+
+
+    <style>
+
+        body{
+            background-color: var(--dark);
+            font-family:  'Arial Narrow Bold', sans-serif;
+            font-weight: lighter;
+            /* letter-spacing: 1px; */
+            overflow: hidden;
+        }
+
+        nav{
+            background-color: rgb(155, 155, 155);
+        }
+
+        ul{
+            list-style: none;
+            
+        }
+
+
+        .tab-pane:hover{
+            cursor: pointer;
+            background-color: lightgray;
+            color: var(--dark);
+            box-shadow: 0 0 4px 1px white;
+            border-bottom: 7px solid var(--primary);
+            
+        }
+
+
+
+        .card{
+            background-color: rgb(199, 199, 199);
+            color: white;
+            border: none;
+            border-bottom: 4px solid var(--primary);
+            border-radius: 6px 6px 0px 0px;
+            margin-bottom: 3px;
+            
+            
+        }
+
+        .tab-pane{
+            transition: all 0.2s ease-in;
+            color: #61676d;
+        }
+
+        .backBtn {
+            border-radius: 50%;
+            /* background-color: #777; */
+            width: 2.5rem;
+        }
+
+        .backBtn:hover{
+            background-color: #666;
+            cursor: pointer;
+        }
+
+        .meals{
+            position: relative;
+
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        }
+
+        .secondSection{
+            
+            position: relative;
+        }
+
+        .countNumber:hover{
+            cursor: pointer;
+        }
+
+        .buttonsFooter{
+            width: 100%;
+            position:absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+
+        .bill{
+            margin-left: 20px;
+            background-color: #6c757d;
+            border-radius: 6px;
+            box-shadow: 0px 0px 6px 1px rgb(63, 62, 62);
+            
+            
+        }
+
+        .bill .billHead{
+            width: 100%;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            background-color: var(--purple);
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .bill .order{
+            margin-left: 0;
+            padding-right: 10px;
+            height: calc(100% - 165px);
+            width: 100%; 
+            position: absolute; 
+            top: 100px; 
+            left: 0;
+            border-radius: 0 0 7px 7px;
+            /* overflow-y: hidden; */
+            /* border: 1px solid; */
+            /* border: 1px solid red;   */
+            /* margin-bottom: 50px; */
+            /* margin-bottom: 50px; */
+            /* margin-top: 100px; */
+        }
+        
+        .tableHeight{
+            height: calc(100% - 65px) ;
+            /* overflow-y: scroll; */
+        }
+
+        table{
+            position: relative;
+        }
+
+        .tableHead{
+            position: sticky;
+        }
+
+
+        .firstFooter{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: lightslategrey;
+            color: white;
+            text-align: center;
+            border-radius: 0px 0px 5px 5px;
+
+            display: none;
+        }
+
+        .secondFooter{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 65px;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            color: white;
+            text-align: center;
+            border-radius: 0px 0px 5px 5px;
+        }
+
+        .delete{
+            background-color: lightgray;
+        }
+
+        .delete:hover{
+            background-color: aliceblue;
+            cursor: pointer;
+        }
+
+
+        @media (max-width: 768px){
+            *{
+                font-size: 10px;
+            }
+        }
+
+    </style>
+
+
+</head>
+<body>
+
+
+    <!-- <nav class="nav nav-bar d-flex justify-content-center text-white" style="height: 40px; margin-bottom: 10px;">
+        logo
+    </nav> -->
+
+    <div class="container-fluid mt-4">
+
+        <div class="row d-flex justify-content-center">
+
+
+
+            <section class="meals col-md-6 col-sm-3 bg-dark" style="width: 100%; height: 90vh; border-radius: 7px; box-shadow: 0px 0px 5px 1px var(--dark);">
+
+                
+                <div class="firstPage p-2">
+
+
+            
+                    <div class="categoryHeading h2 py-2 text-white d-flex justify-content-between">
+                        <div class="head">Category</div>
+                        
+                    </div>
+                        
+
+                    <hr class="onHead" style="background-color: white;">
+
+                    
+
+
+                    <div class="catgories d-flex justify-content-around flex-wrap">
+
+                        
+
+                        <div class="category breakfast tab-pane active card my-2 pt-1" style="width: 15vw;">
+
+                            <div class="icon d-flex justify-content-center pt-2">
+                                <img src="../../plugins/breakfast.png" alt="" style="width: 48px;">
+                            </div>
+                                
+                            <div class="card-body text-center pt-1">
+                                Breakfast
+                            </div>
+                            
+                        </div>
+                
+                        <div class="category tab-pane active card my-2 lunch" style="width: 15vw;">
+
+                            <div class="icon d-flex justify-content-center pt-2">
+                                <img src="../../plugins/lunch-box.png" alt="" style="width: 48px;">
+                            </div>
+                                
+                            <div class="card-body text-center pt-2">
+                                Lunch
+                            </div>
+                            
+                        </div>
+
+                        <div class="category tab-pane active card my-2 dinner" style="width: 15vw;">
+
+                            <div class="icon d-flex justify-content-center pt-2">
+                                <img src="../../plugins/food-tray.png" alt="" style="width: 48px;">
+                            </div>
+                                
+                            <div class="card-body text-center pt-2">
+                                Dinner
+                            </div>
+                            
+                        </div>
+
+
+                        <div class="category tab-pane active card my-2 drinks" style="width: 15vw;">
+                                
+                            <div class="icon d-flex justify-content-center pt-2">
+                                <img src="../../plugins/orange-juice.png" alt="" style="width: 48px;">
+                            </div>
+
+                            <div class="card-body text-center pt-2">
+                                Drinks
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="category tab-pane active card my-2 salads" style="width: 15vw;">
+                                
+                            <div class="icon d-flex justify-content-center pt-2">
+                                <img src="../../plugins/salad.png" alt="" style="width: 48px;">
+                            </div>
+
+                            <div class="card-body text-center pt-2">
+                                Salads
+                            </div>
+                            
+                        </div>
+            
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="secondPage bg-dark d-none p-2" >
+
+                    <div class="categoryHeading h2 py-2 text-white d-none d-flex justify-content-between">
+                        <div class="head"></div>
+
+                        
+
+                        <div class="iconSection d-flex justify-content-between">
+                            
+                            <div class="homeBtn mx-2 backBtn d-flex justify-content-center align-items-center">
+                                <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.75024 19.2502H17.2502C18.3548 19.2502 19.2502 18.3548 19.2502 17.2502V9.75025L12.0002 4.75024L4.75024 9.75025V17.2502C4.75024 18.3548 5.64568 19.2502 6.75024 19.2502Z"/>
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.74963 15.7493C9.74963 14.6447 10.6451 13.7493 11.7496 13.7493H12.2496C13.3542 13.7493 14.2496 14.6447 14.2496 15.7493V19.2493H9.74963V15.7493Z"/>
+                                </svg>
+                                
+                            </div>
+
+                            <div class="secondBackBtn backBtn d-flex justify-content-center align-items-center">
+                                <svg width="32" height="32" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.75 8.75L14.25 12L10.75 15.25"/>
+                                </svg>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="onHead" style="background-color: white;">
+                    
+                    <div class="firstCat tab-content d-flex justify-content-around text-dark my-2 pt-1" style=" width: 100%; flex-wrap: wrap;">
+
+                    
+                    </div>
+
+                    
+                </div>
+
+
+                
+                
+
+                <div class="thirdPage d-none ">
+                    
+
+
+                </div>
+
+                    
+
+                <div class="firstFooter bg-primary">
+                    Restaurant Name
+                </div>
+
+
+        
+            </section>
+        
+        
+        
+        
+        
+            <section class="secondSection col-md-5 col-sm-5" style="width: 100%;">
+
+                <div class="bill">
+
+                
+        
+                    <div class="billHead bg-primary d-flex justify-content-center flex-column " style="margin-bottom: 100px;">
+
+                        <div class="h2 ">
+                            Bill
+                            
+                        </div>
+
+                        <div class="details d-flex justify-content-between align-items-center px-3" style="width: 100%;">
+
+                            <div class="casherAndTime">
+                                
+                                <div class="casherName " style="text-align: start;">
+                                    Name
+                                </div>
+
+                                <div class="orderTime" style="font-size: small; font-family: 'Courier New', Courier, monospace; letter-spacing: 0px;">
+                                    14:01:25 PM
+                                </div>
+                            </div>
+
+                            <div class="orderNumber">
+                                136
+                            </div>
+
+                            
+                        </div>
+
+                    </div>
+                    
+
+            
+                    <div class="order px-0 mx-0" style="background-color: #6c757d;">
+
+
+                        <div class="tableHeight" id="scrolling">
+
+                        
+
+                            <table class="orderList" style="width: 100%;">
+                                <tr class="text-dark py-2 tableHead" style="background-color:#8a8e92">
+
+                                    <th class="py-2 pl-3">
+                                        <div class="mealOrder" >Name</div>
+                                    
+                                    </th>
+                                    
+                                    <th class="">
+                                        <div class="mealCategory" style="font-size: .9rem; text-align: center;">
+                                            Category
+                                        </div>
+                                    </th>
+                                    
+
+                                    <th>
+                                        <div class="price" style="font-size: .9rem; text-align: center;">
+                                            Price
+                                        </div>
+                                    </th>
+                                    
+                                    <th>
+                                        <div class="count" style="font-size: .9rem; text-align: center;">
+                                            Count
+                                        </div>
+                                    </th>
+
+                                    <th>
+                                        <div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">
+                                            Total
+                                        </div>
+                                    </th>
+
+                                    <th>
+                                        <div class="free" style="font-size: .9rem; text-align: center;">
+                                            Free
+                                        </div>
+                                    </th>
+                                    
+                                    <th>
+                                        <div class="discount" style="font-size: .9rem; text-align: center;">
+                                            Discount
+                                        </div>
+                                    </th>
+
+                                    <th class="">
+                                        <div class="priceDiscount" style=" text-align: center;">
+                                            After Discount
+                                        </div>
+                                    </th>
+
+                                    <th> </th>
+                                    
+                                    
+                                </tr>
+
+
+                                
+
+
+                                <!-- <tr class="text-white">
+                                    <td class="py-3 pl-3">
+                                        <div class="mealOrder">Burger</div>
+                                    </td>
+                                    
+                                    <td>
+                                        <div class="mealCategory " style="font-size: .9rem; text-align: center;">
+                                            Drink
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="price" style="font-size: .9rem; text-align: center;">
+                                            50 $
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="count" style="font-size: .9rem; text-align: center;">
+                                            4
+                                        </div>
+                                    </td>
+                                    
+                                    <td>
+                                        <div class="discount" style="font-size: .9rem; text-align: center;">
+                                            5%
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">
+                                            200 $
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="priceDiscount" style=" text-align: center;">
+                                            175 $
+                                        </div>
+                                    </td>
+
+
+                                
+                                    <td class=" px-3 ">
+
+                                    
+                                        <div class="delete d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;">
+                                            <svg width="8" height="12" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/>
+                                                <path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/>
+                                            </svg>
+                                        </div>
+
+                                    </td>
+                                        
+
+                                        
+                                </tr> -->
+
+                                
+
+                            </table>
+                        </div>
+
+
+                        <div class="secondFooter bg-primary d-flex justify-content-center flex-column ">
+
+                            <div class="totalBill h5">
+        
+                                Total = 0 $
+        
+                            </div>
+        
+                            <div class="info px-3 d-flex justify-content-between" style="width: 100%; font-size: 14px;">
+                                <div class="address">
+                                    Jdaideh-Artoz
+                                </div>
+        
+                                <div class="phone">
+                                    011-562-5432
+                                </div>
+        
+                                <div class="mobilePhone">
+                                    092-985-3952
+                                </div>
+        
+                                
+                            </div>
+                            
+                        </div>
+
+            
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="buttonsFooter d-flex justify-content-center ">
+                    <button class="btn btn-secondary btn-lg" >Enter Bill</button>
+
+                    <button class="btn btn-dark mx-2">Cancel</button>
+                </div>
+                
+
+                
+            </section>
+            
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <script src="../../bootstrap/jQuery.js"></script>
+    <script src="../../bootstrap/jquery.nicescroll-master/jquery.nicescroll.js"></script>
+    <script src="casher.js"></script>
+    
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <tr class="">
+    <td>
+        <div class="mealOrder" style="text-align: center">Burger</div>
+    </td>
+    
+    <td>
+        <div class="mealCategory " style="font-size: 14px; text-align: center;">
+            Drink
+        </div>
+    </td>
+
+    <td>
+        <div class="price" style="font-size: 14px; text-align: center;">
+            50 $
+        </div>
+    </td>
+
+    <td>
+        <div class="count" style="font-size: 14px; text-align: center;">
+            4
+        </div>
+    </td>
+    
+    <td>
+        <div class="discount" style="font-size: 14px; text-align: center;">
+            5%
+        </div>
+    </td>
+
+    <td>
+        <div class="priceBeforeDiscount" style="font-size: 15px; text-align: center;">
+            200 $
+        </div>
+    </td>
+
+    <td>
+        <div class="priceDiscount " style=" text-align: center;">
+            175 $
+        </div>
+    </td>
+
+
+
+    <td class=" px-2">
+
+    
+        <div class="delete d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;">
+            <svg width="8" height="12" fill="none" viewBox="0 0 24 24">
+                <path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/>
+                <path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/>
+            </svg>
+        </div>
+
+    </td>
+
+    
+</tr> -->
+
+
+
+
+<!-- 
+<li class="d-flex justify-content-between p-2 text-white">
+<div class="mealOrder">Burger</div>
+
+<div class="count">
+    2
+</div>
+</li> -->
+
+
+
+<!--                         
+                        <div class="subCategory tab-pane card mb-2 breakfastMeal egg" style="width: 12rem;">
+                            
+                            <div class="card-body text-center">
+                                Egg
+                            </div>
+                            
+                        </div>
+            
+                        <div class="subCategory tab-pane card mb-2 breakfastMeal cheese"  style="width: 12rem;">
+                            
+                            <div class="card-body text-center">
+                                Cheese
+                            </div>
+                            
+                        </div>
+            
+                        <div class="subCategory tab-pane card mb-2 breakfastMeal olive" style="width: 12rem;">
+                            
+                            <div class="card-body text-center">
+                                Olive
+                            </div>
+                            
+                        </div>
+            
+                        <div class="subCategory tab-pane card mb-2 launchMeal sandwich" style="width: 12rem;">
+                            
+                            <div class="card-body text-center">
+                                Sandwich
+                            </div>
+                            
+                        </div>
+
+
+                        <div class="tab-pane card mb-2 secondSubCategory sandwichMeal shawerma" style="width: 12rem;">
+                            
+                            <div class="card-body text-center">
+                                Shawarma
+                            </div>
+                            
+                        </div>
+
+
+
+
+                        <div class="subCategory tab-pane card mb-2 launchMeal kebab" style="width: 12rem;">
+                            
+                            <div class="card-body text-center">
+                                Kebab
+                            </div>
+                            
+                        </div>
+
+                        <div class="subCategory tab-pane card mb-2 orange coldDrink" style="width: 12rem;">
+                            
+                            <div class="card-body text-center">
+                                Orange
+                            </div>
+                            
+                        </div>
+
+                        <div class="subCategory tab-pane card mb-2 strawberry coldDrink" style="width: 12rem;">
+                            
+                            <div class="card-body text-center">
+                                Strawberry
+                            </div>
+                            
+                        </div>
+
+                        <div class="subCategory tab-pane card mb-2 coffee hotDrink" style="width: 12rem;">
+                            
+                            <div class="card-body text-center">
+                                Coffee
+                            </div>
+                            
+                        </div>
+
+                        <div class="subCategory tab-pane card mb-2 tea hotDrink" style="width: 12rem;">
+                            
+                            <div class="card-body text-center">
+                                Tea
+                            </div>
+                            
+                        </div> -->
+            
+
+
+
+
+<!-- 
+<div class="categoryHeading h3 text-white d-flex justify-content-between">
+
+
+</div> -->
+
+<!-- 
+<ul>
+
+<li>
+<a href="#" id="sand"> Sandwich </a>
+<ul class="nav nav-pills flex-column sandList">
+    <li> <a class="nav-link" id="westSand" href="#western"  data-toggle="tab"> Western </a></li>
+    <li> <a class="nav-link" id="eastSand" href="#eastern" data-toggle="tab"> Eastern </a></li>
+</ul>
+    
+
+</li>
+
+
+
+<li>
+<a href="#" id="drink"> Drinks </a>
+<ul class="nav nav-pills flex-column drinkList">
+    <li> <a class="nav-link" id="hotDrink" href="#drink"  data-toggle="tab"> Hot </a></li>
+    <li> <a class="nav-link" id="coldDrink" href="#drink" data-toggle="tab"> Cold </a></li>
+</ul>
+</li>
+
+
+<li>
+<a class="new" href="#">New Widget</a>
+</li>
+
+
+</ul> -->
+
+
+<!-- 
+
+
+<div class="card shawermaCard d-none" style=" background-color: inherit; border: none; color: white;">
+
+    <div class="card-img d-flex justify-content-center">
+        <img src="../../plugins/Shawarma.jpg" alt="" class="card-img-top" style="width: 14vw;">
+    </div>
+
+    
+
+    <div class="card-body">
+        <h5 class="card-title">Ingredients</h5>
+
+        <div class="card-text" style="font-size: 12px;">
+
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Exercitationem, suscipit nobis 
+            molestias porro, optio totam maiores ipsam quibusdam quidem magni
+
+        </div>
+
+        <div class="h4 py-4">50$</div>
+
+        <button class="btn btn-primary buyShawerma">Buy</button>
+
+    </div>
+</div>
+
+
+<div class="card KebabCard d-none" style=" background-color: inherit; border: none; color: white;">
+
+    <div class="card-img-top d-flex justify-content-center">
+        <img src="../../plugins/user1.png" alt="" class="card-img-top" style="width: 14vw;">
+    </div>
+
+    
+
+    <div class="card-body">
+        <h5 class="card-title">Ingredients</h5>
+
+        <div class="card-text" style="font-size: 12px;">
+
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Exercitationem, suscipit nobis 
+            molestias porro, optio totam maiores ipsam quibusdam quidem magni 
+            
+
+        </div>
+
+        <div class="h4 py-4">50$</div>
+
+        <button class="btn btn-primary buyShawerma">Buy</button>
+
+    </div>
+</div> -->
+
+
+
+
+
+
+
+
+                        <!-- <div class="headshot  d-flex justify-content-between  text-white bg-primary px-3">
+
+                            <div class="mealOrder pl-0">Name</div>
+                                
+                                <div class="mealDetails d-flex justify-content-between align-items-center">
+
+                                    <div class="mealCategory" style="font-size: 14px;">
+                                        Category
+                                    </div>
+
+                                    <div class="price ml-1" style="font-size: 14px;">
+                                        Price
+                                    </div>
+                                    
+                                    <div class="count ml-1" style="font-size: 14px;">
+                                        Count
+                                    </div>
+
+                                    <div class="discount ml-1" style="font-size: 14px;">
+                                        Discount
+                                    </div>
+
+                                </div>
+
+
+                                <div class="totalPrice d-flex justify-content-between align-items-center">
+
+                                    <div class="priceBeforeDiscount" style="font-size: 15px;">
+                                        Total
+                                    </div>
+                                    
+
+                                    <div class="priceDiscount ml-1">
+                                        After Discount
+                                    </div>
+
+                        
+                                </div>
+
+
+                        </div>
+            
+                        <ul class="orderList pl-0">
+                            <hr style="margin-top: 0;">
+
+                             <hr style="margin-top: 0;"> -->
+                            
+                            <!-- <li class="d-flex justify-content-between py-2 text-white bg-primary px-0">
+                                <div class="mealOrder">Name</div>
+                                
+                                <div class="mealDetails d-flex justify-content-between align-items-center">
+
+                                    <div class="mealCategory" style="font-size: 14px;">
+                                        Category
+                                    </div>
+
+                                    <div class="price ml-4" style="font-size: 14px;">
+                                        Price
+                                    </div>
+                                    
+                                    <div class="count ml-4" style="font-size: 14px;">
+                                        Count
+                                    </div>
+
+                                    <div class="discount ml-4" style="font-size: 14px;">
+                                        Discount
+                                    </div>
+
+                                </div>
+
+
+                                <div class="totalPrice d-flex justify-content-between align-items-center">
+
+                                    <div class="priceBeforeDiscount" style="font-size: 15px;">
+                                        Total
+                                    </div>
+                                    
+
+                                    <div class="priceDiscount ml-4">
+                                        After Discount
+                                    </div>
+
+                                    <div class="delete d-flex justify-content-center  ml-3" style=" border-radius: 50%;  padding: 2px;">
+                                        <svg width="12" height="12" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17.25 6.75L6.75 17.25"/>
+                                            <path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6.75 6.75L17.25 17.25"/>
+                                        </svg>
+                                        
+                                    </div>
+                                </div>
+                            </li>
+
+                            <hr> -->
+
+                            <!-- <li class="d-flex justify-content-between py-2 text-white px-2">
+                                <div class="mealOrder">Burger</div>
+                                
+                                <div class="mealDetails d-flex justify-content-between align-items-center">
+
+                                    <div class="mealCategory mr-2" style="font-size: 14px;">
+                                        Drink
+                                    </div>
+
+                                    <div class="price ml-4 mr-2" style="font-size: 14px;">
+                                        50 $
+                                    </div>
+                                    
+                                    <div class="count ml-4 mr-2" style="font-size: 14px;">
+                                        4
+                                    </div>
+
+                                    <div class="discount ml-4 mr-2" style="font-size: 14px;">
+                                        5%
+                                    </div>
+
+                                </div>
+
+
+                                <div class="totalPrice d-flex justify-content-between align-items-center">
+
+                                    <div class="priceBeforeDiscount" style="font-size: 15px;">
+                                        200 $
+                                    </div>
+                                    
+
+                                    <div class="priceDiscount ml-4">
+                                        175 $
+                                    </div>
+
+                                    <div class="delete d-flex justify-content-center  ml-3" style=" border-radius: 50%;  padding: 2px;">
+                                        <svg width="12" height="12" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17.25 6.75L6.75 17.25"/>
+                                            <path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6.75 6.75L17.25 17.25"/>
+                                        </svg>
+                                        
+                                    </div>
+                                </div>
+                            </li> 
+
+
+                            <hr>
+
+                        </ul> -->
