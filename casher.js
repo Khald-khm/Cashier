@@ -258,22 +258,95 @@ $("document").ready(function(){
                     var itemName = allThings[k].name; 
                     var itemPrice = allThings[k].price;
                     var itemCategory = allThings[k].category;
-                    var itemCount = "1" ;
+                    var itemCount = 1 ;
                     var itemTotal = allThings[k].price;
-                    if($(".countingLabel").is(":empty")){
-                        itemCount = "1";
-                        // console.log("it is empty");
-                    }
-                    else{
-                        itemCount = $(".countingLabel").text();
+                    
 
-                        var itemTotal = itemPrice * itemCount;
-                    }
+                    var exist = false;
 
+                    for(var r in ordered)
+                    {
+                        if(item == ordered[r].name)
+                        {
+                            var discountClass = ".discount" + r;
+
+                            if($(".countingLabel").is(":empty")){
+
+                                ordered[r].count = parseInt(ordered[r].count) + 1;
+                                // itemCount = 1;
+                                // console.log("it is empty");
+                            }
+                            else{
+                                itemCount = parseInt($(".countingLabel").text());
+
+                                
+                                ordered[r].count = itemCount;
+        
+                                // var itemTotal = itemPrice * itemCount;
+                            }
+
+                            // ordered[r].count = parseInt(ordered[r].count) + itemCount;
+                            ordered[r].total = itemPrice * ordered[r].count;
+
+                            // var hello = parseInt(ordered[r].count) ;
+
+                            // hello = hello + itemCount;
+
+                            // console.log("itemCount = " + itemCount );
+                            // console.log("ordered count " + ordered[r].count);
+
+
+                            if($(discountClass).val().includes('%'))
+                            {
+                                ordered[r].discount = $(discountClass).val();
+                                
+                                var discountValue = $(discountClass).val().split("");
+                                discountValue.pop();
+
+
+                                discountValue = discountValue.toLocaleString(discountValue);
+
+                                discountValue = discountValue.replace(",","");
+                                
+                                // console.log("discountValue " + discountValue);
+                                
+                                ordered[r].afterDiscount = ordered[r].total - ( ordered[r].total * discountValue / 100)  - ordered[r].free * ordered[r].price;
+                            }
+                            else{
+                                ordered[r].discount = $(discountClass).val();
+
+                                var trying = parseInt($(discountClass).val()) + 1;
+                                console.log("after Discount " + parseInt(trying));
+
+                                ordered[r].afterDiscount = parseInt(ordered[r].total) - parseInt($(discountClass).val()) - parseInt(ordered[r].free) * parseInt(ordered[r].price);
+                            }
+
+                            
+                            // ordered[r].afterDiscount = parseInt(ordered[r].total) - (parseInt(ordered[r].total) * discountValue / 100)  - parseInt(ordered[r].free) * parseInt(ordered[r].price);
+
+                            
+
+                            exist = true;
+                            
+                        }
+                        else{
+                            exist = false;
+                        }
+                    }
                     
-                    
-                    ordered.push({name : itemName, category : itemCategory, price : itemPrice, count : itemCount, free : "0", discount: "0", total : itemTotal, afterDiscount : itemTotal});
-                    
+                    if(exist == false){
+                        if($(".countingLabel").is(":empty")){
+                            itemCount = "1";
+                            // console.log("it is empty");
+                        }
+                        else{
+                            itemCount = $(".countingLabel").text();
+    
+                            var itemTotal = itemPrice * itemCount;
+                        }
+
+                        ordered.push({name : itemName, category : itemCategory, price : itemPrice, count : itemCount, free : "0", discount: "0", total : itemTotal, afterDiscount : itemTotal});
+                    }
                 }
             }
             
@@ -339,12 +412,12 @@ $("document").ready(function(){
                                 
                                 // console.log("discountValue " + discountValue);
                                 
-                                ordered[i].afterDiscount = ordered[i].total - (ordered[i].total * discountValue / 100)  - ordered[i].free * ordered[i].price;
+                                ordered[i].afterDiscount = parseInt(ordered[i].total) - (parseInt(ordered[i].total) * discountValue / 100)  - parseInt(ordered[i].free) * parseInt(ordered[i].price);
                             }
                             else{
-                                ordered[i].discount = $(discountClass).val();
+                                ordered[i].discount = parseInt($(discountClass).val());
 
-                                ordered[i].afterDiscount = ordered[i].total - $(discountClass).val() - ordered[i].free * ordered[i].price;
+                                ordered[i].afterDiscount = parseInt(ordered[i].total) - parseInt($(discountClass).val()) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
                             }
                             
 
@@ -548,13 +621,13 @@ $("document").ready(function(){
                                 discountValue = discountValue.replace(",","");
 
 
-                                ordered[i].afterDiscount = ordered[i].total - (ordered[i].total * discountValue / 100) - ordered[i].free * ordered[i].price;
+                                ordered[i].afterDiscount = parseInt(ordered[i].total) - (parseInt(ordered[i].total) * discountValue / 100) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
                             }
                             else{
 
-                                ordered[i].discount = $(discountClass).val();
+                                ordered[i].discount = parseInt($(discountClass).val());
 
-                                ordered[i].afterDiscount = ordered[i].total - $(discountClass).val() - ordered[i].free * ordered[i].price;
+                                ordered[i].afterDiscount = parseInt(ordered[i].total) - parseInt($(discountClass).val()) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
                             }
                             
                             
@@ -693,13 +766,13 @@ $("document").ready(function(){
 
                                 
 
-                                ordered[i].afterDiscount = ordered[i].total - (ordered[i].total * discountValue / 100) - ordered[i].free * ordered[i].price;
+                                ordered[i].afterDiscount = parseInt(ordered[i].total) - (parseInt(ordered[i].total) * discountValue / 100) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
                             }
                             else{
 
                                 ordered[i].discount = $(discountClass).val();
 
-                                ordered[i].afterDiscount = ordered[i].total - $(discountClass).val() - ordered[i].free * ordered[i].price;
+                                ordered[i].afterDiscount = parseInt(ordered[i].total) - parseInt($(discountClass).val()) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
                             }
                             
                             
@@ -873,7 +946,7 @@ $("document").ready(function(){
 
             num += 1;
             
-            disabled.push(item);
+            // disabled.push(item);
             
 
             $("#scrolling").getNiceScroll().resize();
