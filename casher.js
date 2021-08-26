@@ -46,18 +46,12 @@ $("document").ready(function(){
     allMeals = allMeals.concat(breakfast, dinner, salad, cold, hot, sandwich);
 
 
-    var disabled = new Array("nothing");
-
-    var status = "";
+    var stacking = [];
 
     
 
     var orderNum = new Array();
     var num = 1;
-
-
-
-
 
 
     function firstCategory(meal, items){
@@ -99,10 +93,11 @@ $("document").ready(function(){
 
     function thirdPage(para){
         
-        var currentThirdPage = para;
+        
 
         $(document).on("click", "." + para, function(){
             
+
             $(".subCategory").removeClass("active");
             
             $(".thirdPage").addClass("d-flex justify-content-center flex-column");
@@ -110,16 +105,7 @@ $("document").ready(function(){
 
             $(".thirdPage").empty();
 
-            for(exist in disabled){
-                if(disabled[exist] == para){
-                    status = "disabled";
-                    break
-                }
-
-                else{
-                    status = "";
-                }
-            }
+            
 
             for(var l in allThings)
             {
@@ -248,6 +234,7 @@ $("document").ready(function(){
     var j;
 
     
+    var addTimes = new Array();
 
     function buy(item){
         $(document).on("click", ".buy"+item, function(){
@@ -280,10 +267,17 @@ $("document").ready(function(){
                                 itemCount = parseInt($(".countingLabel").text());
 
                                 
-                                ordered[r].count = itemCount;
+                                ordered[r].count = parseInt(ordered[r].count) + itemCount;
         
                                 // var itemTotal = itemPrice * itemCount;
                             }
+
+                            var times = ordered[r].stack;
+                            times.push(itemCount);
+
+                            ordered[r].stack = times;
+
+                            console.log(times);
 
                             // ordered[r].count = parseInt(ordered[r].count) + itemCount;
                             ordered[r].total = itemPrice * ordered[r].count;
@@ -316,7 +310,6 @@ $("document").ready(function(){
                                 ordered[r].discount = $(discountClass).val();
 
                                 var trying = parseInt($(discountClass).val()) + 1;
-                                console.log("after Discount " + parseInt(trying));
 
                                 ordered[r].afterDiscount = parseInt(ordered[r].total) - parseInt($(discountClass).val()) - parseInt(ordered[r].free) * parseInt(ordered[r].price);
                             }
@@ -324,9 +317,13 @@ $("document").ready(function(){
                             
                             // ordered[r].afterDiscount = parseInt(ordered[r].total) - (parseInt(ordered[r].total) * discountValue / 100)  - parseInt(ordered[r].free) * parseInt(ordered[r].price);
 
+
+
+                           
                             
 
                             exist = true;
+
                             
                         }
                         else{
@@ -336,30 +333,53 @@ $("document").ready(function(){
                     
                     if(exist == false){
                         if($(".countingLabel").is(":empty")){
-                            itemCount = "1";
+                            itemCount = 1;
                             // console.log("it is empty");
                         }
                         else{
-                            itemCount = $(".countingLabel").text();
+                            itemCount = parseInt($(".countingLabel").text());
     
                             var itemTotal = itemPrice * itemCount;
                         }
 
-                        ordered.push({name : itemName, category : itemCategory, price : itemPrice, count : itemCount, free : "0", discount: "0", total : itemTotal, afterDiscount : itemTotal});
+
+                        
+
+                        var times = [];
+                        times.push(itemCount)
+                        
+                        ordered.push({id : r, name : itemName, category : itemCategory, price : itemPrice, count : itemCount, free : "0", disableFree : " ", discount: "0", disableDiscount : " ", total : itemTotal, afterDiscount : itemTotal, stack : times});
+
+                        var times = [];
+
+                        orderNum.push(item);
+
+                        for(var y = 0; y < ordered.length; y++)
+                        {
+                            for(var e = y+1; e < ordered.length; e++)
+                            {
+                                if(ordered[y].name == ordered[e].name)
+                                {
+                                    ordered.splice(e, 1);
+                                }
+                            }
+                        }
+
+                        
+                        
                     }
                 }
             }
             
+            
             $(".orderList").empty();
-            $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th></tr>')
+            $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th><th> </th></tr>')
 
             for(var c = 0; c < ordered.length; c++)
             {
-                $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"></div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
+                $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"'+ ordered[c].disableFree +'></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"' + ordered[c].disableDiscount + '></div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td><div class="undo undo' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="'+ c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M9.25 4.75L4.75 9L9.25 13.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M5.5 9H15.25C17.4591 9 19.25 10.7909 19.25 13V19.25"/></svg></div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="' + c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
             }
-            
 
-            orderNum.push(item);
             
             
                 
@@ -427,12 +447,12 @@ $("document").ready(function(){
 
 
                             $(".orderList").empty();
-                            $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th></tr>')
+                            $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th><th> </th></tr>')
 
                             for(var c = 0; c < ordered.length; c++)
                             {
                                 // console.log(c + " = after Discount " + ordered[c].afterDiscount);
-                                $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"> </div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
+                                $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"'+ ordered[c].disableFree +'></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"' + ordered[c].disableDiscount + '> </div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td><div class="undo undo' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="'+ c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M9.25 4.75L4.75 9L9.25 13.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M5.5 9H15.25C17.4591 9 19.25 10.7909 19.25 13V19.25"/></svg></div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="' + c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
                             }
 
                             // console.log(ordered);
@@ -490,83 +510,22 @@ $("document").ready(function(){
 
                         totalResult += parseInt(value);
 
-                        // totalResult += parseInt($(field).text());
-                        
-
-                        $(".totalBill").empty();
-                        $(".totalBill").append("Total = " + totalResult + " $");
-                    }
-                    
-                })
-
-            }
+                        if($("#discountOnTotal").val().includes('%'))
+                        {
+                            var discountOnTotal = $("#discountOnTotal").val().split("");
+                            discountOnTotal.pop();
 
 
-            for(i = 0; i < orderNum.length; i++)
-            {
-                var nameClass = ".mealNumber" + i;
-                var deleteLine = ".delete" + i;
-                
+                            discountOnTotal = discountOnTotal.toLocaleString(discountOnTotal);
 
-                $(document).on("click", deleteLine, function(){
-                
-                    for(var s = 0; s < ordered.length; s++)
-                    {
-                        if(ordered[s].name == $(nameClass).text()){
-                    
-                            for(var w = 0; w < disabled.length; w++)
-                            {
-                                if(disabled[w] == ordered[s].name)
-                                {
-                                    console.log("splice one item");
-                                    disabled.splice(w, 1);
-                                }
-                            }
-                            
-                            console.log(ordered[s].name);
-                            console.log(ordered[s]);
-                            ordered.splice(s, 1);
-                            console.log(ordered);
+                            discountOnTotal = discountOnTotal.replace(",","");
 
-                            
-
-                            $(".orderList").empty();
-                            $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th></tr>')
-
-                            for(var c = 0; c < ordered.length; c++)
-                            {
-                                $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"> </div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
-                            }
-                        
-                                                    
-                            
-                            // console.log(ordered);
-
+                            totalResult = totalResult - (totalResult * parseInt(discountOnTotal) / 100);
                         }
-                    }
-                
 
-                    var totalResult = 0;
-                
-                    for(var t = 0; t < ordered.length; t++){
-                        var field = ".discountPrice" + t;
-                        
-                        var value = parseInt($(field).text());
-
-
-
-                        // if(isNaN(value))
-                        // {
-                        //     value = "0";
-                        // }
-
-                        // else{
-                            // value = totalResult;
-                            // var value = parseInt($(field).text());
-                        // }
-                        
-
-                        totalResult += parseInt(value);
+                        else{
+                            totalResult = totalResult - parseInt($("#discountOnTotal").val());
+                        }
 
                         // totalResult += parseInt($(field).text());
                         
@@ -574,21 +533,13 @@ $("document").ready(function(){
                         $(".totalBill").empty();
                         $(".totalBill").append("Total = " + totalResult + " $");
                     }
-
-                    if(ordered.length == 0)
-                    {
-                        $(".totalBill").empty();
-                        $(".totalBill").append("Total = 0 $");
-                    }
-
-                
+                    
                 })
-
 
             }
 
 
-
+            
 
 
             for(i = 0; i < orderNum.length; i++)
@@ -634,13 +585,21 @@ $("document").ready(function(){
 
                             // ordered[i].afterDiscount = ordered[i].total - (ordered[i].total * ordered[i].discount / 100);
 
+                            if(ordered[i].discount != 0)
+                            {
+                                ordered[i].disableFree = "disabled";
+                            }
+                            else{
+                                ordered[i].disableFree = "";
+                            }
+                            
 
                             $(".orderList").empty();
-                            $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th></tr>')
+                            $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th><th> </th></tr>')
 
                             for(var c = 0; c < ordered.length; c++)
                             {
-                                $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"> </div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
+                                $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"'+ ordered[c].disableFree +'></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"' + ordered[c].disableDiscount + '> </div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td><div class="undo undo' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="'+ c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M9.25 4.75L4.75 9L9.25 13.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M5.5 9H15.25C17.4591 9 19.25 10.7909 19.25 13V19.25"/></svg></div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="' + c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
                             }
 
                             // console.log(ordered);
@@ -675,57 +634,30 @@ $("document").ready(function(){
 
                         totalResult += parseInt(value);
 
+                        if($("#discountOnTotal").val().includes('%'))
+                        {
+                            var discountOnTotal = $("#discountOnTotal").val().split("");
+                            discountOnTotal.pop();
+
+
+                            discountOnTotal = discountOnTotal.toLocaleString(discountOnTotal);
+
+                            discountOnTotal = discountOnTotal.replace(",","");
+
+                            totalResult = totalResult - (totalResult * parseInt(discountOnTotal) / 100);
+                        }
+
+                        else{
+                            totalResult = totalResult - parseInt($("#discountOnTotal").val());
+                        }
+
+
                         // totalResult += parseInt($(field).text());
                         
 
                         $(".totalBill").empty();
                         $(".totalBill").append("Total = " + totalResult + " $");
                     }
-
-
-
-                    // var discount = $(discountClass).val();
-                    // var total = parseInt($(totalClass).text());
-
-                    // var res;
-                    // if(discount == 0)
-                    // {
-                    //     res = total;
-                    // }
-                    // else{
-                    //     res = total - (discount * total / 100);
-                    // }
-            
-                    // $(totalDiscountClass).empty();
-                    // $(totalDiscountClass).append(res.toString());
-
-                    // var totalResult = 0;
-                
-                    // for(var t = 1; t <= orderNum.length; t++){
-                    //     var field = ".discountPrice" + t;
-                        
-                    //     var value = parseInt($(field).text());
-
-
-
-                    //     if(isNaN(value))
-                    //     {
-                    //         value = "0";
-                    //     }
-
-                    //     else{
-                    //         // value = totalResult;
-                    //         var value = parseInt($(field).text());
-                    //     }
-
-
-                    //     totalResult += parseInt(value);
-
-                    //     // totalResult += parseInt($(field).text());
-
-                    //     $(".totalBill").empty();
-                    //     $(".totalBill").append("Total = " + totalResult + " $");
-                    // }
                     
                 })
 
@@ -747,7 +679,20 @@ $("document").ready(function(){
                     {
                         if(ordered[i].name == $(nameClass).text()){
 
-                            ordered[i].free = $(freeClass).val();
+                            if($(freeClass).val() >= ordered[i].count)
+                            {
+                                $(".validMessage").empty();
+                                $(".validMessage").append("This value is to big");
+                                $(".validMessage").addClass("styleMessage");
+
+                            }
+                            else{
+                                ordered[i].free = $(freeClass).val();
+
+                                $(".validMessage").removeClass("styleMessage");
+                                $(".validMessage").empty();
+                            }
+                            
 
                             ordered[i].total = ordered[i].price * ordered[i].count;
 
@@ -775,17 +720,25 @@ $("document").ready(function(){
                                 ordered[i].afterDiscount = parseInt(ordered[i].total) - parseInt($(discountClass).val()) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
                             }
                             
+
+                            if(ordered[i].free != 0)
+                            {
+                                ordered[i].disableDiscount = "disabled";
+                            }
+                            else{
+                                ordered[i].disableDiscount = "";
+                            }
                             
 
                             // ordered[i].afterDiscount = ordered[i].total - (ordered[i].total * ordered[i].discount / 100);
 
 
                             $(".orderList").empty();
-                            $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th></tr>')
+                            $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th><th> </th></tr>')
 
                             for(var c = 0; c < ordered.length; c++)
                             {
-                                $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"> </div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
+                                $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"'+ ordered[c].disableFree +'></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"' + ordered[c].disableDiscount + '> </div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td><div class="undo undo' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="'+ c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M9.25 4.75L4.75 9L9.25 13.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M5.5 9H15.25C17.4591 9 19.25 10.7909 19.25 13V19.25"/></svg></div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="' + c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
                             }
 
                             // console.log(ordered);
@@ -805,20 +758,25 @@ $("document").ready(function(){
                         
                         var value = parseInt($(field).text());
 
-
-
-                        // if(isNaN(value))
-                        // {
-                        //     value = "0";
-                        // }
-
-                        // else{
-                            // value = totalResult;
-                            // var value = parseInt($(field).text());
-                        // }
-                        
-
                         totalResult += parseInt(value);
+
+                        if($("#discountOnTotal").val().includes('%'))
+                        {
+                            var discountOnTotal = $("#discountOnTotal").val().split("");
+                            discountOnTotal.pop();
+
+
+                            discountOnTotal = discountOnTotal.toLocaleString(discountOnTotal);
+
+                            discountOnTotal = discountOnTotal.replace(",","");
+
+                            totalResult = totalResult - (totalResult * parseInt(discountOnTotal) / 100);
+                        }
+
+                        else{
+                            totalResult = totalResult - parseInt($("#discountOnTotal").val());
+                        }
+
 
                         // totalResult += parseInt($(field).text());
                         
@@ -829,56 +787,50 @@ $("document").ready(function(){
 
 
 
-                    // var discount = $(discountClass).val();
-                    // var total = parseInt($(totalClass).text());
-
-                    // var res;
-                    // if(discount == 0)
-                    // {
-                    //     res = total;
-                    // }
-                    // else{
-                    //     res = total - (discount * total / 100);
-                    // }
-            
-                    // $(totalDiscountClass).empty();
-                    // $(totalDiscountClass).append(res.toString());
-
-                    // var totalResult = 0;
-                
-                    // for(var t = 1; t <= orderNum.length; t++){
-                    //     var field = ".discountPrice" + t;
-                        
-                    //     var value = parseInt($(field).text());
-
-
-
-                    //     if(isNaN(value))
-                    //     {
-                    //         value = "0";
-                    //     }
-
-                    //     else{
-                    //         // value = totalResult;
-                    //         var value = parseInt($(field).text());
-                    //     }
-
-
-                    //     totalResult += parseInt(value);
-
-                    //     // totalResult += parseInt($(field).text());
-
-                    //     $(".totalBill").empty();
-                    //     $(".totalBill").append("Total = " + totalResult + " $");
-                    // }
                     
                 })
 
             }
-            
-            // don't forget to enable button when click by searching in the array and remove
-            // the wanted element from the array
 
+            
+            $(document).on("change", "#discountOnTotal", function(){
+                var totalResult = 0;
+                
+                    for(var t = 0; t < ordered.length; t++){
+                        var field = ".discountPrice" + t;
+                        
+                        var value = parseInt($(field).text());
+
+                        totalResult += parseInt(value);
+
+                        if($("#discountOnTotal").val().includes('%'))
+                        {
+                            var discountOnTotal = $("#discountOnTotal").val().split("");
+                            discountOnTotal.pop();
+
+
+                            discountOnTotal = discountOnTotal.toLocaleString(discountOnTotal);
+
+                            discountOnTotal = discountOnTotal.replace(",","");
+
+                            totalResult = totalResult - (totalResult * parseInt(discountOnTotal) / 100);
+                        }
+
+                        else{
+                            totalResult = totalResult - parseInt($("#discountOnTotal").val());
+                        }
+
+
+                        // totalResult += parseInt($(field).text());
+                        
+
+                        $(".totalBill").empty();
+                        $(".totalBill").append("Total = " + totalResult + " $");
+                    }
+
+
+            })
+            
 
             
             for(j = 1; j <= orderNum.length; j++){
@@ -906,6 +858,24 @@ $("document").ready(function(){
 
 
                     totalResult += parseInt(value);
+
+                        if($("#discountOnTotal").val().includes('%'))
+                        {
+                            var discountOnTotal = $("#discountOnTotal").val().split("");
+                            discountOnTotal.pop();
+
+
+                            discountOnTotal = discountOnTotal.toLocaleString(discountOnTotal);
+
+                            discountOnTotal = discountOnTotal.replace(",","");
+
+                            totalResult = totalResult - (totalResult * parseInt(discountOnTotal) / 100);
+                        }
+
+                        else{
+                            totalResult = totalResult - parseInt($("#discountOnTotal").val());
+                        }
+
 
                     
                     // totalResult += parseInt($(field).text());
@@ -937,6 +907,24 @@ $("document").ready(function(){
 
                 totalResult += parseInt(value);
 
+                        if($("#discountOnTotal").val().includes('%'))
+                        {
+                            var discountOnTotal = $("#discountOnTotal").val().split("");
+                            discountOnTotal.pop();
+
+
+                            discountOnTotal = discountOnTotal.toLocaleString(discountOnTotal);
+
+                            discountOnTotal = discountOnTotal.replace(",","");
+
+                            totalResult = totalResult - (totalResult * parseInt(discountOnTotal) / 100);
+                        }
+
+                        else{
+                            totalResult = totalResult - parseInt($("#discountOnTotal").val());
+                        }
+
+
                 // totalResult += parseInt($(field).text());
                 
 
@@ -947,6 +935,9 @@ $("document").ready(function(){
             num += 1;
             
             // disabled.push(item);
+
+        
+        
             
 
             $("#scrolling").getNiceScroll().resize();
@@ -955,7 +946,199 @@ $("document").ready(function(){
     }
 
 
+
+
+    $(document).on("click", ".delete", function(){
+        var deleteId = $(this).attr("id");
+
+        buy("nothing");
+
+        var mealNumber = ".mealNumber" + deleteId;
+
+        for(var s = 0; s < ordered.length; s++)
+        {
+            if(ordered[s].name == $(mealNumber).text()){
+        
+                ordered.splice(s, 1);
+
+                $(".orderList").empty();
+                $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th><th> </th></tr>')
+
+                for(var c = 0; c < ordered.length; c++)
+                {
+                    $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"'+ ordered[c].disableFree +'></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"' + ordered[c].disableDiscount + '> </div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td><div class="undo undo' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="'+ c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M9.25 4.75L4.75 9L9.25 13.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M5.5 9H15.25C17.4591 9 19.25 10.7909 19.25 13V19.25"/></svg></div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="' + c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
+                }
+            
+            }
+        }
     
+
+        var totalResult = 0;
+    
+        for(var t = 0; t < ordered.length; t++){
+            var field = ".discountPrice" + t;
+            
+            var value = parseInt($(field).text());
+
+
+
+            totalResult += parseInt(value);
+
+                        if($("#discountOnTotal").val().includes('%'))
+                        {
+                            var discountOnTotal = $("#discountOnTotal").val().split("");
+                            discountOnTotal.pop();
+
+
+                            discountOnTotal = discountOnTotal.toLocaleString(discountOnTotal);
+
+                            discountOnTotal = discountOnTotal.replace(",","");
+
+                            totalResult = totalResult - (totalResult * parseInt(discountOnTotal) / 100);
+                        }
+
+                        else{
+                            totalResult = totalResult - parseInt($("#discountOnTotal").val());
+                        }
+
+
+            // totalResult += parseInt($(field).text());
+            
+
+            $(".totalBill").empty();
+            $(".totalBill").append("Total = " + totalResult + " $");
+        }
+
+        if(ordered.length == 0)
+        {
+            $(".totalBill").empty();
+            $(".totalBill").append("Total = 0 $");
+        }
+
+    })
+
+
+
+
+    $(document).on("click", ".undo", function(){
+        var undoId = $(this).attr("id");
+    
+        buy("nothing");
+
+        var mealName = ".mealNumber" + undoId;
+
+        for(var d = 0; d <= ordered.length; d++)
+        {
+            if(ordered[d].name == $(mealName).text())
+            {
+                var discountClass = ".discount" + d;
+                var lastItem = $(ordered[d].stack).get(-1);
+                
+                ordered[d].count = parseInt(ordered[d].count) - lastItem;
+
+                ordered[d].stack.pop();
+
+
+                if(ordered[d].count == 0)
+                {
+                    
+                    ordered.splice(d, 1);
+
+                }
+
+
+                else{
+
+                    ordered[d].total = parseInt(ordered[d].price) * parseInt(ordered[d].count);
+
+            
+
+
+                    if($(discountClass).val().includes('%'))
+                    {
+                        ordered[d].discount = $(discountClass).val();
+                        
+                        var discountValue = $(discountClass).val().split("");
+                        discountValue.pop();
+
+
+                        discountValue = discountValue.toLocaleString(discountValue);
+
+                        discountValue = discountValue.replace(",","");
+                        
+                        // console.log("discountValue " + discountValue);
+                        
+                        ordered[d].afterDiscount = parseInt(ordered[d].total) - (parseInt(ordered[d].total) * discountValue / 100)  - parseInt(ordered[d].free) * parseInt(ordered[d].price);
+                    }
+                    else{
+                        ordered[d].discount = parseInt($(discountClass).val());
+
+                        ordered[d].afterDiscount = parseInt(ordered[d].total) - parseInt($(discountClass).val()) - parseInt(ordered[d].free) * parseInt(ordered[d].price);
+                    }
+
+                }
+
+
+
+                $(".orderList").empty();
+                $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th><th> </th></tr>')
+
+                for(var c = 0; c < ordered.length; c++)
+                {
+                    $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"'+ ordered[c].disableFree +'></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"' + ordered[c].disableDiscount + '> </div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td><div class="undo undo' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="'+ c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M9.25 4.75L4.75 9L9.25 13.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M5.5 9H15.25C17.4591 9 19.25 10.7909 19.25 13V19.25"/></svg></div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="' + c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
+                }
+            
+             
+                var totalResult = 0;
+                
+                for(var t = 0; t < ordered.length; t++){
+                    var field = ".discountPrice" + t;
+                    
+                    var value = parseInt($(field).text());
+                    
+
+                    totalResult += parseInt(value);
+
+                        if($("#discountOnTotal").val().includes('%'))
+                        {
+                            var discountOnTotal = $("#discountOnTotal").val().split("");
+                            discountOnTotal.pop();
+
+
+                            discountOnTotal = discountOnTotal.toLocaleString(discountOnTotal);
+
+                            discountOnTotal = discountOnTotal.replace(",","");
+
+                            console.log(discountOnTotal);
+
+                            totalResult = totalResult - (totalResult * parseInt(discountOnTotal) / 100);
+                        }
+
+                        else{
+                            totalResult = totalResult - parseInt($("#discountOnTotal").val());
+                        }
+ 
+
+                    $(".totalBill").empty();
+                    $(".totalBill").append("Total = " + totalResult + " $");
+                }
+
+                if(ordered.length == 0)
+                {
+                    $(".totalBill").empty();
+                    $(".totalBill").append("Total = 0 $");
+                }
+
+            }
+            
+        }
+
+
+
+        
+
+    })
+
 
 
 
@@ -973,14 +1156,28 @@ $("document").ready(function(){
 
 
 
+    $(document).on("click", ".cancelOrder", function(){
+        ordered = [];
 
+        $(".orderList").empty();
+        $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th><th> </th></tr>')
 
+        for(var c = 0; c < ordered.length; c++)
+        {
+            $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"'+ ordered[c].disableFree +'></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"' + ordered[c].disableDiscount + '></div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td><div class="undo undo' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="'+ c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M9.25 4.75L4.75 9L9.25 13.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M5.5 9H15.25C17.4591 9 19.25 10.7909 19.25 13V19.25"/></svg></div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="' + c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
+        }
+
+        console.log(ordered);
+            
+    })
+
+   
     
     // Prevent changes in input number
     // Just by arrows
-    $(document).on("keydown", "input[type='number']", function(e){
-        e.preventDefault();
-    })
+    // $(document).on("keydown", "input[type='number']", function(e){
+    //     e.preventDefault();
+    // })
 
     
 
@@ -1489,3 +1686,398 @@ $("document").ready(function(){
     //     });
 
     // })
+
+
+
+
+
+
+
+    // for(i = 0; i < orderNum.length; i++)
+            // {
+            //     var nameClass = ".mealNumber" + i;
+            //     var deleteLine = ".delete" + i;
+                
+
+            //     $(document).on("click", deleteLine, function(){
+                
+            //         for(var s = 0; s < ordered.length; s++)
+            //         {
+            //             if(ordered[s].name == $(nameClass).text()){
+                    
+                            
+                            
+            //                 ordered.splice(s, 1);
+
+                            
+
+            //                 $(".orderList").empty();
+            //                 $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th><th> </th></tr>')
+
+            //                 for(var c = 0; c < ordered.length; c++)
+            //                 {
+            //                     $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"'+ ordered[c].disableFree +'></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"' + ordered[c].disableDiscount + '> </div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td><div class="undo undo' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="'+ c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M9.25 4.75L4.75 9L9.25 13.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M5.5 9H15.25C17.4591 9 19.25 10.7909 19.25 13V19.25"/></svg></div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
+            //                 }
+                        
+                                                    
+                            
+            //                 // console.log(ordered);
+
+            //             }
+            //         }
+                
+
+            //         var totalResult = 0;
+                
+            //         for(var t = 0; t < ordered.length; t++){
+            //             var field = ".discountPrice" + t;
+                        
+            //             var value = parseInt($(field).text());
+
+
+
+            //             // if(isNaN(value))
+            //             // {
+            //             //     value = "0";
+            //             // }
+
+            //             // else{
+            //                 // value = totalResult;
+            //                 // var value = parseInt($(field).text());
+            //             // }
+                        
+
+            //             totalResult += parseInt(value);
+
+            //             // totalResult += parseInt($(field).text());
+                        
+
+            //             $(".totalBill").empty();
+            //             $(".totalBill").append("Total = " + totalResult + " $");
+            //         }
+
+            //         if(ordered.length == 0)
+            //         {
+            //             $(".totalBill").empty();
+            //             $(".totalBill").append("Total = 0 $");
+            //         }
+
+                
+            //     })
+
+
+            // }
+
+            // for(var u in ordered)
+            // {
+            //     console.log("loop for " + u + " time");
+            //     $(document).on("click", ".undo"+u, function(){
+                    
+            //         if(ordered[u].name == $(".mealNumber"+u).text())
+            //         {
+            //             console.log("hello to condition");
+            //             var time = ordered[u].stack.slice(-1);
+
+            //             var manyTime = ordered[u].stack.split("");
+            //             manyTime.pop();
+            //             console.log("time = " + time);
+            //             console.log(manyTime);
+            //         }
+            //         else{
+            //             console.log("Out of condition");
+            //         }
+            //     })
+            // }
+
+
+
+
+
+
+
+
+            // for(var z = 0; z < orderNum.length; z++)
+            // {
+            //     var nameClass = ".mealNumber" + z;
+            //     var undoLine = ".undo" + z;
+
+
+            //     console.log("------------------");
+                
+
+            //     $(document).on("click", ".undo0", function(){
+
+            //         console.log(ordered.length);
+                
+            //         for(var t = 0; t < ordered.length; t++)
+            //         {
+            //             if(ordered[t].name == $(".mealNumber0").text()){
+            //                 // console.log("undo line " + undoLine);
+            //                 // console.log("name " + ordered[t].name);
+            //                 console.log("meal = " + $(".mealNumber0").text());
+            //                 // console.log(ordered[t].stack.pop());
+            //                 ordered[t].stack.pop();
+            //                 console.log(ordered[t].stack);
+            //             }
+            //             else{
+            //                 console.log("fuck it");
+            //             }
+            //         }
+            //         console.log(ordered);
+            //     })
+            // }
+                    
+
+
+
+
+
+
+            
+            // for(var n = 0; n < orderNum.length; n++)
+            // {
+            //     var mealClass = ".mealNumber" + n;
+            //     var undoLine = ".undo" + n;
+                
+
+            //     $(document).on("click", undoLine, function(){
+
+            //         // console.log("ordered length second : " + ordered.length);
+                
+            //         for(var h = 0; h < ordered.length; h++)
+            //         {
+
+            //             console.log("h = " + h);
+            //             if(ordered[h].name == $(mealClass).text()){
+
+            //                 console.log("plus for time " + h);
+                    
+                            
+
+            //                 var lastItem = $(ordered[h].stack).get(-1);
+
+            //                 // for(var e = 0; e < ordered[s].stack.length; e++)
+            //                 // {
+
+            //                     // if(e == lastItem)
+            //                     // {
+            //                         // var lastItem = ordered[s].stack[e];
+            //                         console.log("lastItem = " + lastItem);
+            //                         // console.log("e " + e);
+            //                         ordered[h].count = parseInt(ordered[h].count) - lastItem;
+
+            //                         ordered[h].stack.pop();
+
+
+            //                         if(ordered[h].count == 0)
+            //                         {
+                                        
+            //                             ordered.splice(h, 1);
+
+            //                             $(".orderList").empty();
+            //                             $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th><th> </th></tr>')
+
+            //                             for(var c = 0; c < ordered.length; c++)
+            //                             {
+            //                                 $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"'+ ordered[c].disableFree +'></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"' + ordered[c].disableDiscount + '> </div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td><div class="undo undo' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M9.25 4.75L4.75 9L9.25 13.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M5.5 9H15.25C17.4591 9 19.25 10.7909 19.25 13V19.25"/></svg></div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
+            //                             }
+
+            //                             var totalResult = 0;
+                
+            //                             for(var t = 0; t < ordered.length; t++){
+            //                                 var field = ".discountPrice" + t;
+                                            
+            //                                 var value = parseInt($(field).text());
+                                            
+
+            //                                 totalResult += parseInt(value); 
+
+            //                                 $(".totalBill").empty();
+            //                                 $(".totalBill").append("Total = " + totalResult + " $");
+            //                             }
+
+            //                             if(ordered.length == 0)
+            //                             {
+            //                                 $(".totalBill").empty();
+            //                                 $(".totalBill").append("Total = 0 $");
+            //                             }
+
+            //                             console.log(ordered);
+                                    
+            //                         }
+
+            //                         else{
+
+            //                             ordered[h].total = parseInt(ordered[h].price) * parseInt(ordered[h].count);
+
+                                
+
+
+            //                             if($(discountClass).val().includes('%'))
+            //                             {
+            //                                 ordered[h].discount = $(discountClass).val();
+                                            
+            //                                 var discountValue = $(discountClass).val().split("");
+            //                                 discountValue.pop();
+
+
+            //                                 discountValue = discountValue.toLocaleString(discountValue);
+
+            //                                 discountValue = discountValue.replace(",","");
+                                            
+            //                                 // console.log("discountValue " + discountValue);
+                                            
+            //                                 ordered[h].afterDiscount = parseInt(ordered[h].total) - (parseInt(ordered[h].total) * discountValue / 100)  - parseInt(ordered[h].free) * parseInt(ordered[h].price);
+            //                             }
+            //                             else{
+            //                                 ordered[h].discount = parseInt($(discountClass).val());
+
+            //                                 ordered[h].afterDiscount = parseInt(ordered[h].total) - parseInt($(discountClass).val()) - parseInt(ordered[h].free) * parseInt(ordered[h].price);
+            //                             }
+
+            //                         }
+                                    
+
+            //                     // }
+            //                 // }
+
+                            
+
+            //                 $(".orderList").empty();
+            //                 $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th><th> </th></tr>')
+
+            //                 for(var c = 0; c < ordered.length; c++)
+            //                 {
+            //                     $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"'+ ordered[c].disableFree +'></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"' + ordered[c].disableDiscount + '> </div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td><div class="undo undo' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M9.25 4.75L4.75 9L9.25 13.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M5.5 9H15.25C17.4591 9 19.25 10.7909 19.25 13V19.25"/></svg></div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
+            //                 }
+                        
+                                                    
+                            
+            //                 // console.log(ordered);
+
+            //             }
+            //         }
+                
+
+            //         var totalResult = 0;
+                
+            //         for(var t = 0; t < ordered.length; t++){
+            //             var field = ".discountPrice" + t;
+                        
+            //             var value = parseInt($(field).text());
+                        
+
+            //             totalResult += parseInt(value); 
+
+            //             $(".totalBill").empty();
+            //             $(".totalBill").append("Total = " + totalResult + " $");
+            //         }
+
+            //         if(ordered.length == 0)
+            //         {
+            //             $(".totalBill").empty();
+            //             $(".totalBill").append("Total = 0 $");
+            //         }
+
+                
+            //     })
+
+
+            // }
+
+
+
+
+
+
+
+
+             // var discount = $(discountClass).val();
+                    // var total = parseInt($(totalClass).text());
+
+                    // var res;
+                    // if(discount == 0)
+                    // {
+                    //     res = total;
+                    // }
+                    // else{
+                    //     res = total - (discount * total / 100);
+                    // }
+            
+                    // $(totalDiscountClass).empty();
+                    // $(totalDiscountClass).append(res.toString());
+
+                    // var totalResult = 0;
+                
+                    // for(var t = 1; t <= orderNum.length; t++){
+                    //     var field = ".discountPrice" + t;
+                        
+                    //     var value = parseInt($(field).text());
+
+
+
+                    //     if(isNaN(value))
+                    //     {
+                    //         value = "0";
+                    //     }
+
+                    //     else{
+                    //         // value = totalResult;
+                    //         var value = parseInt($(field).text());
+                    //     }
+
+
+                    //     totalResult += parseInt(value);
+
+                    //     // totalResult += parseInt($(field).text());
+
+                    //     $(".totalBill").empty();
+                    //     $(".totalBill").append("Total = " + totalResult + " $");
+                    // }
+
+
+
+
+                    
+                    // var discount = $(discountClass).val();
+                    // var total = parseInt($(totalClass).text());
+
+                    // var res;
+                    // if(discount == 0)
+                    // {
+                    //     res = total;
+                    // }
+                    // else{
+                    //     res = total - (discount * total / 100);
+                    // }
+            
+                    // $(totalDiscountClass).empty();
+                    // $(totalDiscountClass).append(res.toString());
+
+                    // var totalResult = 0;
+                
+                    // for(var t = 1; t <= orderNum.length; t++){
+                    //     var field = ".discountPrice" + t;
+                        
+                    //     var value = parseInt($(field).text());
+
+
+
+                    //     if(isNaN(value))
+                    //     {
+                    //         value = "0";
+                    //     }
+
+                    //     else{
+                    //         // value = totalResult;
+                    //         var value = parseInt($(field).text());
+                    //     }
+
+
+                    //     totalResult += parseInt(value);
+
+                    //     // totalResult += parseInt($(field).text());
+
+                    //     $(".totalBill").empty();
+                    //     $(".totalBill").append("Total = " + totalResult + " $");
+                    // }
