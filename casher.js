@@ -76,10 +76,18 @@ $("document").ready(function(){
 
         $(".firstCat").empty();
 
+        var howCount = 0;
         for(var prop in content)
         {
-            $(".firstCat").append('<div class="subCategory tab-pane card mb-2  ' + addingClass + '  "  style="width: 12rem;"><div class="card-body text-center ' + content[prop] + '">' + content[prop] + '</div></div>');
-            
+            for(var w in ordered)
+            {
+                if(content[prop] == ordered[w].name)
+                {
+                    howCount = ordered[w].count;
+                }
+            }
+            $(".firstCat").append('<div class="subCategory tab-pane card mb-2  ' + addingClass + '  "  style="width: 12rem;"><div class="card-body text-center ' + content[prop] + '">' + content[prop] + '<br> <span style="margin-top: 7px; background-color: white; ">' + howCount + '</span></div></div>');
+            howCount = 0;
         }
     }
 
@@ -116,7 +124,17 @@ $("document").ready(function(){
                 }
             }
 
-            $(".thirdPage").append('<div class="categoryHeadingTwo h2 py-2 text-white d-none justify-content-between"><div class="head"></div><div class="iconSection d-flex justify-content-between"><div class="homeBtn mx-2 backBtn d-flex justify-content-center align-items-center"><svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.75024 19.2502H17.2502C18.3548 19.2502 19.2502 18.3548 19.2502 17.2502V9.75025L12.0002 4.75024L4.75024 9.75025V17.2502C4.75024 18.3548 5.64568 19.2502 6.75024 19.2502Z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.74963 15.7493C9.74963 14.6447 10.6451 13.7493 11.7496 13.7493H12.2496C13.3542 13.7493 14.2496 14.6447 14.2496 15.7493V19.2493H9.74963V15.7493Z"/></svg></div><div class="thirdBackBtn backBtn d-flex justify-content-center align-items-center"><svg width="32" height="32" fill="none" viewBox="0 0 24 24"><path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.75 8.75L14.25 12L10.75 15.25"/></svg></div></div></div><div class="card ' + para + " " + para + 'Card d-none" style=" background-color: inherit; border: none; color: white;"><div class = "barNumber d-flex justify-content-center flex-column"><ul class = "d-flex justify-content-center flex-row"> <li class="countNumber counting0" style="margin: 2px; border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 0 </li><li class="countNumber counting1" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 1 </li><li class="countNumber counting2" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 2 </li> <li class="countNumber counting3" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 3 </li><li class="countNumber counting4" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 4 </li> <li class="countNumber counting5" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 5 </li><li class="countNumber counting6" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 6 </li><li class="countNumber counting7" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 7 </li><li class="countNumber counting8" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 8 </li><li class="countNumber counting9" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 9 </li></ul> <div class="d-flex justify-content-center"><div class="countingLabel " style ="width: 35px; font-size: 1.2rem;"></div></div></div><div class="card-img d-flex justify-content-center"><img src="../../plugins/' + para + '.jpg" alt="" class="card-img-top" style="width: 14vw;"></div><div class="card-body"><div class="d-flex justify-content-between align-items-center pb-3"><h5 class="card-title pt-1" style="font-size: 1.5rem;">Ingredients</h5> <div class="h3">' + paraPrice + '</div> </div> <div class="card-text" style="font-size: 1rem;">' + paraDescription + '</div><div class="d-flex justify-content-center align-items-center pt-5"><button class="btn btn-primary w-50 buy'+ para +'" ' + status + '>Add</button> </div></div></div>');
+            var currentCount = 0;
+            
+            for(var p in ordered)
+            {
+                if(ordered[p].name == para)
+                {
+                    currentCount = ordered[p].count;
+                }
+            }
+
+            $(".thirdPage").append('<div class="categoryHeadingTwo h2 py-2 text-white d-none justify-content-between"><div class="head"></div><div class="iconSection d-flex justify-content-between"><div class="homeBtn mx-2 backBtn d-flex justify-content-center align-items-center"><svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.75024 19.2502H17.2502C18.3548 19.2502 19.2502 18.3548 19.2502 17.2502V9.75025L12.0002 4.75024L4.75024 9.75025V17.2502C4.75024 18.3548 5.64568 19.2502 6.75024 19.2502Z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.74963 15.7493C9.74963 14.6447 10.6451 13.7493 11.7496 13.7493H12.2496C13.3542 13.7493 14.2496 14.6447 14.2496 15.7493V19.2493H9.74963V15.7493Z"/></svg></div><div class="thirdBackBtn backBtn d-flex justify-content-center align-items-center"><svg width="32" height="32" fill="none" viewBox="0 0 24 24"><path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.75 8.75L14.25 12L10.75 15.25"/></svg></div></div></div><div class="card ' + para + " " + para + 'Card d-none" style=" background-color: inherit; border: none; color: white;"><div class="d-flex justify-content-center mb-2"><button class=" plusOneItem btn btn-sm" id="' + para + '">+</button><input class="currentCount" value="' + currentCount + '" type="text" style="width: 30px;"><button class="minsOneItem btn btn-sm" id="' + para + '">-</button></div><div class = "barNumber d-flex justify-content-center flex-column"><ul class = "d-flex justify-content-center flex-row"> <li class="countNumber counting0" style="margin: 2px; border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 0 </li><li class="countNumber counting1" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 1 </li><li class="countNumber counting2" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 2 </li> <li class="countNumber counting3" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 3 </li><li class="countNumber counting4" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 4 </li> <li class="countNumber counting5" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 5 </li><li class="countNumber counting6" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 6 </li><li class="countNumber counting7" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 7 </li><li class="countNumber counting8" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 8 </li><li class="countNumber counting9" style="margin: 2px;border-radius: 50%; background-color: var(--primary); width: 1.3rem; text-align: center; display: flex; justify-content: center;"> 9 </li></ul> <div class="d-flex justify-content-center"><div class="countingLabel " style ="width: 35px; margin-bottom: 15px; font-size: 1.2rem; background-color: white; color: var(--dark);" readOnly></div><div></div></div></div><div class="card-img d-flex justify-content-center"><img src="../../plugins/' + para + '.jpg" alt="" class="card-img-top" style="width: 14vw;"></div><div class="card-body"><div class="d-flex justify-content-between align-items-center pb-3"><h5 class="card-title pt-1" style="font-size: 1.5rem;">Ingredients</h5> <div class="h3">' + paraPrice + '</div> </div> <div class="card-text" style="font-size: 1rem;">' + paraDescription + '</div><div class="d-flex justify-content-center align-items-center pt-5"><button class="btn btn-primary w-50 buy'+ para +'" ' + status + '>Add</button> </div></div></div>');
 
 
             $("hr.onHead").addClass("d-none");
@@ -558,6 +576,8 @@ $("document").ready(function(){
 
                             // ordered[i].discount = $(discountClass).val();
 
+                            
+
                             ordered[i].total = ordered[i].price * ordered[i].count;
 
                             if($(discountClass).val().includes('%'))
@@ -570,7 +590,7 @@ $("document").ready(function(){
                                 discountValue = discountValue.toLocaleString(discountValue);
                                 
                                 discountValue = discountValue.replace(",","");
-
+                               
 
                                 ordered[i].afterDiscount = parseInt(ordered[i].total) - (parseInt(ordered[i].total) * discountValue / 100) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
                             }
@@ -578,18 +598,29 @@ $("document").ready(function(){
 
                                 ordered[i].discount = parseInt($(discountClass).val());
 
-                                ordered[i].afterDiscount = parseInt(ordered[i].total) - parseInt($(discountClass).val()) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
+                                if($(discountClass).val() == "")
+                                {
+                                    ordered[i].discount = 0;
+                                }
+
+                                if(ordered[i].free == "")
+                                {
+                                    ordered[i].free = 0;
+                                }    
+
+                                ordered[i].afterDiscount = parseInt(ordered[i].total) - parseInt(ordered[i].discount) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
                             }
                             
                             
 
                             // ordered[i].afterDiscount = ordered[i].total - (ordered[i].total * ordered[i].discount / 100);
 
-                            if(ordered[i].discount != 0)
+                            if(ordered[i].discount > 0)
                             {
                                 ordered[i].disableFree = "disabled";
                             }
-                            else{
+                            else if(ordered[i].discount == 0)
+                            {
                                 ordered[i].disableFree = "";
                             }
                             
@@ -715,17 +746,29 @@ $("document").ready(function(){
                             }
                             else{
 
-                                ordered[i].discount = $(discountClass).val();
+                                if($(discountClass).val() == "")
+                                {
+                                    ordered[i].discount = 0;
 
-                                ordered[i].afterDiscount = parseInt(ordered[i].total) - parseInt($(discountClass).val()) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
+                                }
+
+                                if(ordered[i].free == "")
+                                {
+                                    ordered[i].free = 0;
+                                }    
+
+                                // ordered[i].discount = $(discountClass).val();
+
+                                ordered[i].afterDiscount = parseInt(ordered[i].total) - parseInt(ordered[i].discount) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
                             }
                             
 
-                            if(ordered[i].free != 0)
+                            if(ordered[i].free > 0)
                             {
                                 ordered[i].disableDiscount = "disabled";
                             }
-                            else{
+                            else if(ordered[i].free == 0)
+                            {
                                 ordered[i].disableDiscount = "";
                             }
                             
@@ -946,6 +989,239 @@ $("document").ready(function(){
     }
 
 
+    $(document).on("click", ".plusOneItem", function(){
+        var plusOne = $(this).attr("id");
+
+        for(var i in ordered)
+        {
+            var discountClass = ".discount" + i;
+            if(ordered[i].name == plusOne)
+            {
+                ordered[i].stack.push(1);
+                ordered[i].count  = parseInt(ordered[i].count) + 1;
+                thirdPage(plusOne);
+                
+                ordered[i].total = ordered[i].price * ordered[i].count;            // ordered[i].discount = $(discountClass).val();
+
+                if($(discountClass).val().includes('%'))
+                {
+                    ordered[i].discount = $(discountClass).val();
+
+                    var discountValue = $(discountClass).val().split("");
+                    discountValue.pop();
+
+                    discountValue = discountValue.toLocaleString(discountValue);
+                    
+                    discountValue = discountValue.replace(",","");
+
+                    
+
+                    ordered[i].afterDiscount = parseInt(ordered[i].total) - (parseInt(ordered[i].total) * discountValue / 100) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
+                }
+                else{
+
+                    if($(discountClass).val() == "")
+                    {
+                        ordered[i].discount = 0;
+
+                    }
+
+                    if(ordered[i].free == "")
+                    {
+                        ordered[i].free = 0;
+                    }    
+
+                    // ordered[i].discount = $(discountClass).val();
+
+                    ordered[i].afterDiscount = parseInt(ordered[i].total) - parseInt(ordered[i].discount) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
+                }
+                
+                $(".orderList").empty();
+                $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th><th> </th></tr>')
+
+                for(var c = 0; c < ordered.length; c++)
+                {
+                    $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"'+ ordered[c].disableFree +'></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"' + ordered[c].disableDiscount + '> </div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td><div class="undo undo' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="'+ c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M9.25 4.75L4.75 9L9.25 13.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M5.5 9H15.25C17.4591 9 19.25 10.7909 19.25 13V19.25"/></svg></div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="' + c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
+                }
+            }
+            
+        }
+        var totalResult = 0;
+                
+            for(var t = 0; t < ordered.length; t++){
+                var field = ".discountPrice" + t;
+                
+                var value = parseInt($(field).text());
+
+
+
+                // if(isNaN(value))
+                // {
+                //     value = "0";
+                // }
+
+                // else{
+                    // value = totalResult;
+                    // var value = parseInt($(field).text());
+                // }
+                
+
+                totalResult += parseInt(value);
+
+                if($("#discountOnTotal").val().includes('%'))
+                {
+                    var discountOnTotal = $("#discountOnTotal").val().split("");
+                    discountOnTotal.pop();
+
+
+                    discountOnTotal = discountOnTotal.toLocaleString(discountOnTotal);
+
+                    discountOnTotal = discountOnTotal.replace(",","");
+
+                    totalResult = totalResult - (totalResult * parseInt(discountOnTotal) / 100);
+                }
+
+                else{
+                    totalResult = totalResult - parseInt($("#discountOnTotal").val());
+                }
+
+
+                // totalResult += parseInt($(field).text());
+                
+
+                $(".totalBill").empty();
+                $(".totalBill").append("Total = " + totalResult + " $");
+            }
+    })
+
+
+    $(document).on("click", ".minsOneItem", function(){
+        var minsOne = $(this).attr("id");
+
+        for(var i in ordered)
+        {
+            var discountClass = ".discount" + i;
+            if(ordered[i].name == minsOne)
+            {
+                if(parseInt(ordered[i].count) > 1)
+                {
+                    ordered[i].count  = parseInt(ordered[i].count) - 1;
+                    thirdPage(minsOne);
+
+                    var lastItem = $(ordered[i].stack).get(-1);
+
+                    lastItem = lastItem - 1;
+
+                    ordered[i].stack.pop();
+
+                    if(lastItem != 0)
+                    {
+                        ordered[i].stack.push(lastItem);
+                    }
+                    
+
+                    ordered[i].total = ordered[i].price * ordered[i].count;            // ordered[i].discount = $(discountClass).val();
+
+                    if($(discountClass).val().includes('%'))
+                    {
+                        ordered[i].discount = $(discountClass).val();
+
+                        var discountValue = $(discountClass).val().split("");
+                        discountValue.pop();
+
+                        discountValue = discountValue.toLocaleString(discountValue);
+                        
+                        discountValue = discountValue.replace(",","");
+
+                        
+
+                        ordered[i].afterDiscount = parseInt(ordered[i].total) - (parseInt(ordered[i].total) * discountValue / 100) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
+                    }
+                    else{
+
+                        if($(discountClass).val() == "")
+                        {
+                            ordered[i].discount = 0;
+
+                        }
+
+                        if(ordered[i].free == "")
+                        {
+                            ordered[i].free = 0;
+                        }    
+
+                        // ordered[i].discount = $(discountClass).val();
+
+                        ordered[i].afterDiscount = parseInt(ordered[i].total) - parseInt(ordered[i].discount) - parseInt(ordered[i].free) * parseInt(ordered[i].price);
+                    }
+                }
+                else{
+                    ordered.splice(i, 1);
+                }
+                
+                
+                
+                
+                $(".orderList").empty();
+                $(".orderList").append('<tr class="text-dark py-2 tableHead" style="background-color:#8a8e92"><th class="py-2 pl-3"><div class="mealOrder" >Name</div></th><th class=""><div class="mealCategory" style="font-size: .9rem; text-align: center;">Category</div></th><th><div class="price" style="font-size: .9rem; text-align: center;">Price</div></th><th><div class="count" style="font-size: .9rem; text-align: center;">Count</div></th><th><div class="priceBeforeDiscount" style="font-size: .95rem; text-align: center;">Total</div></th><th><div class="free" style="font-size: .9rem; text-align: center;">Free</div></th><th><div class="discount" style="font-size: .9rem; text-align: center;">Discount</div></th><th class=""><div class="priceDiscount" style=" text-align: center;">After Discount</div></th><th> </th><th> </th></tr>')
+
+                for(var c = 0; c < ordered.length; c++)
+                {
+                    $(".orderList").append('<tr class="text-white line' + c + '"><td class="py-3 pl-3"><div class="mealOrder mealNumber' + c + '" style="font-size: .9rem;">' + ordered[c].name + '</div></td><td><div class="mealCategory " style="font-size: .9rem; text-align: center;">' + ordered[c].category + '</div></td><td><div class="price' + c + '" style="font-size: .9rem; text-align: center;">' + ordered[c].price + '</div></td><td><div class="count d-flex justify-content-center" style="font-size: .9rem;"><input class="count' + c + '" type="text" value ="' + ordered[c].count + '" min ="1" style="width: 45px; border: none;"></div></td><td><div class="total' + c + '" style="font-size: .95rem; text-align: center;">' + ordered[c].total +'</div></td><td><div class="free d-flex justify-content-center" style="font-size: .9rem;"><input class="free' + c + '" type="text" value ="' + ordered[c].free + '" min ="1" style="width: 45px; border: none;"'+ ordered[c].disableFree +'></div></td><td><div class="discount d-flex justify-content-center" style="font-size: .9rem; text-align: center;"><input class="discount' + c + '" type="text" value ="' + ordered[c].discount + '" min ="0" max="100"  style="width: 45px;  border: none;"' + ordered[c].disableDiscount + '> </div></td><td><div class="discountPrice' + c + '" style=" text-align: center;">' + ordered[c].afterDiscount + '</div></td><td><div class="undo undo' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="'+ c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M9.25 4.75L4.75 9L9.25 13.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M5.5 9H15.25C17.4591 9 19.25 10.7909 19.25 13V19.25"/></svg></div></td><td class=" px-3 "><div class="delete delete' + c + ' d-flex justify-content-center" style=" border-radius: 50%;  padding: 2px;" id="' + c + '"><svg width="8" height="12" fill="none" viewBox="0 0 24 24"><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M17.25 6.75L6.75 17.25"/><path stroke="var(--dark)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" d="M6.75 6.75L17.25 17.25"/></svg></div></td></tr>');
+                }
+            }
+            
+        }
+        var totalResult = 0;
+                
+            for(var t = 0; t < ordered.length; t++){
+                var field = ".discountPrice" + t;
+                
+                var value = parseInt($(field).text());
+
+
+
+                // if(isNaN(value))
+                // {
+                //     value = "0";
+                // }
+
+                // else{
+                    // value = totalResult;
+                    // var value = parseInt($(field).text());
+                // }
+                
+
+                totalResult += parseInt(value);
+
+                if($("#discountOnTotal").val().includes('%'))
+                {
+                    var discountOnTotal = $("#discountOnTotal").val().split("");
+                    discountOnTotal.pop();
+
+
+                    discountOnTotal = discountOnTotal.toLocaleString(discountOnTotal);
+
+                    discountOnTotal = discountOnTotal.replace(",","");
+
+                    totalResult = totalResult - (totalResult * parseInt(discountOnTotal) / 100);
+                }
+
+                else{
+                    totalResult = totalResult - parseInt($("#discountOnTotal").val());
+                }
+
+
+                // totalResult += parseInt($(field).text());
+                
+
+                $(".totalBill").empty();
+                $(".totalBill").append("Total = " + totalResult + " $");
+            }
+    })
+
+
+
 
 
     $(document).on("click", ".delete", function(){
@@ -1129,6 +1405,10 @@ $("document").ready(function(){
                     $(".totalBill").append("Total = 0 $");
                 }
 
+                
+                thirdPage(ordered[d].name);
+
+                
             }
             
         }
@@ -1405,6 +1685,7 @@ $("document").ready(function(){
 
         $(".secondPage").fadeOut("fast", function(){
             $(".thirdPage").fadeOut("fast");
+            secondPage();
 
             $(".secondPage").removeClass("d-block");
             $(".secondPage").removeClass("d-flex");
@@ -1546,7 +1827,7 @@ $("document").ready(function(){
     // function thirdPage(name){
     //     $(".thirdPage").empty();
 
-    //     $(".thirdPage").append('<div class="card ' + name + " " + name + 'Card d-none" style=" background-color: inherit; border: none; color: white;"><div class="card-img d-flex justify-content-center"><img src="../../plugins/' + name + '.jpg" alt="" class="card-img-top" style="width: 14vw;"></div><div class="card-body"><h5 class="card-title">Ingredients</h5><div class="card-text" style="font-size: 12px;">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Exercitationem, suscipit nobis molestias porro, optio totam maiores ipsam quibusdam quidem magni</div><div class="h4 py-4">50$</div><button class="btn btn-primary buyShawerma">Buy</button></div></div>')
+    //     $(".thirdPage").append('<div class="card ' + name + " " + name + 'Card d-none" style=" background-color: inherit; border: none; color: white;"><div class="card-img d-flex justify-content-center"><img src="../../plugins/' + name + '.jpg" alt="" class="card-img-top" style="width: 14vw;"></div><div class="card-body"><h5 class="card-title">Ingredients</h5><div class="card-text" style="font-size: 12px;">Lorem ipsum dolor sit </div><div class="h4 py-4">50$</div><button class="btn btn-primary buyShawerma">Buy</button></div></div>')
     // }
 
 
@@ -1556,47 +1837,47 @@ $("document").ready(function(){
     // add item to the bill
     // $(".steak").click(function(){
     //     $(".orderList").append(
-    //     "<li class='d-flex justify-content-between p-2' style='background-color: lightgray; border-radius: 7px;'><div class='mealOrder'>Steak</div><div class='count'>1</div></li>");
+    //     "<li class='d-flex justify-content-between p-2' style='background-color: var(--dark); border-radius: 7px;'><div class='mealOrder'>Steak</div><div class='count'>1</div></li>");
     // })
 
-    // $(".scallob").click(function(){
+    // $(".scallop").click(function(){
     //     $(".orderList").append(
-    //     "<li class='d-flex justify-content-between p-2' style='background-color: lightgray; border-radius: 7px;'><div class='mealOrder'>Scallob</div><div class='count'>1</div></li>");
+    //     "<li class='d-flex justify-content-between p-2' style='background-color: var(--dark); border-radius: 7px;'><div class='mealOrder'>Scallop</div><div class='count'>1</div></li>");
     // })
     
     // $(".burger").click(function(){
     //     $(".orderList").append(
-    //     "<li class='d-flex justify-content-between p-2' style='background-color: lightgray; border-radius: 7px;'><div class='mealOrder'>Burger</div><div class='count'>1</div></li>");
+    //     "<li class='d-flex justify-content-between p-2' style='background-color: var(--dark); border-radius: 7px;'><div class='mealOrder'>Burger</div><div class='count'>1</div></li>");
     // })
 
-    // $(".barpeque").click(function(){
+    // $(".barbecue").click(function(){
     //     $(".orderList").append(
-    //     "<li class='d-flex justify-content-between p-2' style='background-color: lightgray; border-radius: 7px;'><div class='mealOrder'>Barpeque</div><div class='count'>1</div></li>");
+    //     "<li class='d-flex justify-content-between p-2' style='background-color: var(--dark); border-radius: 7px;'><div class='mealOrder'>Barbecue</div><div class='count'>1</div></li>");
     // })
 
     // $(".kebab").click(function(){
     //     $(".orderList").append(
-    //     "<li class='d-flex justify-content-between p-2' style='background-color: lightgray; border-radius: 7px;'><div class='mealOrder'>Kebab</div><div class='count'>1</div></li>");
+    //     "<li class='d-flex justify-content-between p-2' style='background-color: var(--dark); border-radius: 7px;'><div class='mealOrder'>Kebab</div><div class='count'>1</div></li>");
     // })
 
     // $(".coffee").click(function(){
     //     $(".orderList").append(
-    //     "<li class='d-flex justify-content-between p-2' style='background-color: lightgray; border-radius: 7px;'><div class='mealOrder'>Coffee</div><div class='count'>1</div></li>");
+    //     "<li class='d-flex justify-content-between p-2' style='background-color: var(--dark); border-radius: 7px;'><div class='mealOrder'>Coffee</div><div class='count'>1</div></li>");
     // })
 
     // $(".tea").click(function(){
     //     $(".orderList").append(
-    //     "<li class='d-flex justify-content-between p-2' style='background-color: lightgray; border-radius: 7px;'><div class='mealOrder'>Tea</div><div class='count'>1</div></li>");
+    //     "<li class='d-flex justify-content-between p-2' style='background-color: var(--dark); border-radius: 7px;'><div class='mealOrder'>Tea</div><div class='count'>1</div></li>");
     // })
 
     // $(".strawberry").click(function(){
     //     $(".orderList").append(
-    //     "<li class='d-flex justify-content-between p-2' style='background-color: lightgray; border-radius: 7px;'><div class='mealOrder'>Strawberry</div><div class='count'>1</div></li>");
+    //     "<li class='d-flex justify-content-between p-2' style='background-color: var(--dark); border-radius: 7px;'><div class='mealOrder'>Strawberry</div><div class='count'>1</div></li>");
     // })
 
     // $(".orange").click(function(){
     //     $(".orderList").append(
-    //     "<li class='d-flex justify-content-between p-2' style='background-color: lightgray; border-radius: 7px;'><div class='mealOrder'>ornage</div><div class='count'>1</div></li>");
+    //     "<li class='d-flex justify-content-between p-2' style='background-color: var(--dark); border-radius: 7px;'><div class='mealOrder'>orange</div><div class='count'>1</div></li>");
     // })
 
 
