@@ -4,203 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="libs/bootstrap.min.css">
+    <link rel="stylesheet" href="cashier.css">
     <title>Casher</title>
 
 
     <style>
-
-        body{
-            background-color: var(--dark);
-            font-family:  'Arial Narrow Bold', sans-serif;
-            font-weight: lighter;
-            /* letter-spacing: 1px; */
-            overflow: hidden;
-        }
-
-        nav{
-            background-color: rgb(155, 155, 155);
-        }
-
-        ul{
-            list-style: none;
-            
-        }
-
-
-        .tab-pane:hover{
-            cursor: pointer;
-            background-color: lightgray;
-            color: var(--dark);
-            box-shadow: 0 0 4px 1px white;
-            border-bottom: 7px solid var(--primary);
-            
-        }
-
-
-
-        .card{
-            background-color: rgb(199, 199, 199);
-            color: white;
-            border: none;
-            border-bottom: 4px solid var(--primary);
-            border-radius: 6px 6px 0px 0px;
-            margin-bottom: 3px;
-            
-            
-        }
-
-        .tab-pane{
-            transition: all 0.2s ease-in;
-            color: #61676d;
-        }
-
-        .backBtn {
-            border-radius: 50%;
-            /* background-color: #777; */
-            width: 2.5rem;
-        }
-
-        .backBtn:hover{
-            background-color: #666;
-            cursor: pointer;
-        }
-
-        .meals{
-            position: relative;
-
-            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-        }
-
-        .secondSection{
-            
-            position: relative;
-        }
-
-        .countNumber:hover{
-            cursor: pointer;
-        }
-
-        .styleMessage{
-            background-color: #61676d;
-            color: yellow;
-            border-radius: 10px;
-            padding: 2px;
-        }
-
-        .buttonsFooter{
-            width: 100%;
-            position:absolute;
-            bottom: 0;
-            left: 0;
-        }
-
-
-        .bill{
-            margin-left: 20px;
-            background-color: #6c757d;
-            border-radius: 6px;
-            box-shadow: 0px 0px 6px 1px rgb(63, 62, 62);
-            
-            
-        }
-
-        .bill .billHead{
-            width: 100%;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-            background-color: var(--purple);
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-radius: 6px 6px 0 0;
-        }
-
-        .bill .order{
-            margin-left: 0;
-            padding-right: 10px;
-            height: calc(100% - 165px);
-            width: 100%; 
-            position: absolute; 
-            top: 100px; 
-            left: 0;
-            border-radius: 0 0 7px 7px;
-            /* overflow-y: hidden; */
-            /* border: 1px solid; */
-            /* border: 1px solid red;   */
-            /* margin-bottom: 50px; */
-            /* margin-bottom: 50px; */
-            /* margin-top: 100px; */
-        }
-        
-        .tableHeight{
-            height: calc(100% - 95px) ;
-            /* overflow-y: scroll; */
-        }
-
-        table{
-            position: relative;
-        }
-
-        .tableHead{
-            position: sticky;
-        }
-
-
-        .firstFooter{
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            background-color: lightslategrey;
-            color: white;
-            text-align: center;
-            border-radius: 0px 0px 5px 5px;
-
-            display: none;
-        }
-
-        .secondFooter{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 95px;
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            color: white;
-            text-align: center;
-            border-radius: 0px 0px 5px 5px;
-        }
-
-        .delete{
-            background-color: lightgray;
-        }
-
-        .delete:hover{
-            background-color: aliceblue;
-            cursor: pointer;
-        }
-
-        .undo{
-            background-color: lightgray;
-        }
-
-        .undo:hover{
-            background-color: aliceblue;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px){
-            *{
-                font-size: 10px;
-            }
-        }
 
     </style>
 
@@ -244,7 +53,7 @@
                         <div class="category breakfast tab-pane active card my-2 pt-1" style="width: 15vw;">
 
                             <div class="icon d-flex justify-content-center pt-2">
-                                <img src="../../plugins/breakfast.png" alt="" style="width: 48px;">
+                                <img src="../../plugins/icons/breakfast.png" alt="" style="width: 48px;">
                             </div>
                                 
                             <div class="card-body text-center pt-1">
@@ -256,7 +65,7 @@
                         <div class="category tab-pane active card my-2 lunch" style="width: 15vw;">
 
                             <div class="icon d-flex justify-content-center pt-2">
-                                <img src="../../plugins/lunch-box.png" alt="" style="width: 48px;">
+                                <img src="../../plugins/icons/lunch-box.png" alt="" style="width: 48px;">
                             </div>
                                 
                             <div class="card-body text-center pt-2">
@@ -268,7 +77,7 @@
                         <div class="category tab-pane active card my-2 dinner" style="width: 15vw;">
 
                             <div class="icon d-flex justify-content-center pt-2">
-                                <img src="../../plugins/food-tray.png" alt="" style="width: 48px;">
+                                <img src="../../plugins/icons/food-tray.png" alt="" style="width: 48px;">
                             </div>
                                 
                             <div class="card-body text-center pt-2">
@@ -281,7 +90,7 @@
                         <div class="category tab-pane active card my-2 drinks" style="width: 15vw;">
                                 
                             <div class="icon d-flex justify-content-center pt-2">
-                                <img src="../../plugins/orange-juice.png" alt="" style="width: 48px;">
+                                <img src="../../plugins/icons/orange-juice.png" alt="" style="width: 48px;">
                             </div>
 
                             <div class="card-body text-center pt-2">
@@ -293,7 +102,7 @@
                         <div class="category tab-pane active card my-2 salads" style="width: 15vw;">
                                 
                             <div class="icon d-flex justify-content-center pt-2">
-                                <img src="../../plugins/salad.png" alt="" style="width: 48px;">
+                                <img src="../../plugins/icons/salad.png" alt="" style="width: 48px;">
                             </div>
 
                             <div class="card-body text-center pt-2">
@@ -594,9 +403,84 @@
 
 
                 <div class="buttonsFooter d-flex justify-content-center ">
-                    <button class="btn btn-secondary btn-lg" >Enter Bill</button>
+                    
+                    <button type="button" class="btn btn-secondary btn-lg makeBill" data-toggle="modal" data-target="#exampleModalScrollable">
+                        Enter Bill
+                    </button>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalScrollableTitle">Bill</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
 
-                    <button class="btn btn-dark mx-2 cancelOrder">Cancel</button>
+                            <div class="modal-body" style="height: 430px; overflow: auto;">
+                                <div class="form-group">
+                                    <select class="form-control choosingClient" id="exampleFormControlSelect1">
+                                      <option value="">Choose a Client</option>
+                                      <option value="new">New</option>
+                                      <option value="frequent">Frequent</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group underClientType">
+
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="totalInModal">
+                                        Total = 0 $
+                                    </label>
+                                </div>
+                                  
+
+                                <div class="form-group">
+                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Notes..."></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                <select class="form-control orderType" id="exampleFormControlSelect1">
+                                    <option value="">Order Type</option>
+                                    <option value="internal">Internal</option>
+                                    <option value="external">External</option>
+                                    
+                                </select>
+                                </div>
+
+                                <div class="from-group underOrderType">
+                                    
+                                </div>
+
+
+                                
+
+                                <div class="form-group">
+                                <select class="form-control" id="exampleFormControlSelect1">
+                                    <option value="">Sample</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                    
+                                </select>
+                                </div>
+
+                            </div>
+
+                            
+
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Enter</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
                 </div>
                 
 
@@ -613,8 +497,9 @@
 
 
 
-    <script src="../../bootstrap/jQuery.js"></script>
-    <script src="../../bootstrap/jquery.nicescroll-master/jquery.nicescroll.js"></script>
+    <script src="libs/bootstrap.min.js"></script>
+    <script src="libs/jQuery.js"></script>
+    <script src="libs/jquery.nicescroll.min.js"></script>
     <script src="casher.js"></script>
     
 </body>
